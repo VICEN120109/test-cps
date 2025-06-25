@@ -1,0 +1,640 @@
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ff6b6b, #ffd166, #06d6a0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    margin-bottom: 25px;
+    max-width: 800px;
+    margin: 0 auto 25px;
+    line-height: 1.6;
+}
+
+/* Área de clics MUCHO más grande */
+.click-area-container {
+    position: relative;
+    margin: 20px auto 20px;
+    width: 95%;
+    height: 450px; /* Aumentado de 350px a 450px */
+    min-height: 400px;
+    max-height: 600px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+#click-area {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem; /* Reducido de 2.5rem a 2.2rem */
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    position: relative;
+    border: 4px solid rgba(255, 255, 255, 0.15);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+#click-area:hover {
+    transform: scale(1.01);
+}
+
+#click-area:active {
+    transform: scale(0.99);
+}
+
+/* Controles entre el panel y el timer */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+button {
+    background: linear-gradient(45deg, #118ab2, #073b4c);
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+#share-btn {
+    background: linear-gradient(45deg, #ef476f, #ff6b6b);
+}
+
+button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Temporizador circular corregido (0° a 360°) */
+.timer-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 30px;
+}
+
+.timer-circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.timer {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #ffd166;
+    text-shadow: 0 0 20px rgba(255, 209, 102, 0.6);
+}
+
+.timer-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(transparent, transparent var(--progress), #06d6a0 var(--progress), #06d6a0);
+    transition: background 0.1s linear;
+    --progress: 0deg;
+}
+
+/* Selector de tiempo */
+.time-selector-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+}
+
+.time-selector-container label {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    color: #ffd166;
+}
+
+#time-selector {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    width: 220px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0 40px;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 25px;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-7px);
+}
+
+.stat-title {
+    font-size: 1.3rem;
+    color: #a0a0a0;
+    margin-bottom: 12px;
+}
+
+.stat-value {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+#click-count {
+    color: #ffd166;
+    text-shadow: 0 0 15px rgba(255, 209, 102, 0.6);
+}
+
+#cps-result {
+    color: #06d6a0;
+    text-shadow: 0 0 15px rgba(6, 214, 160, 0.6);
+}
+
+/* Contenedor de resultados (elementos mucho más pequeños) */
+.result-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(26, 26, 46, 0.96);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    z-index: 20;
+    padding: 20px;
+    text-align: center;
+}
+
+.result-title {
+    color: #ffd166;
+    font-size: 1.8rem; /* Reducido de 2.8rem a 1.8rem */
+    margin-bottom: 15px; /* Reducido de 25px a 15px */
+    text-shadow: 0 0 15px rgba(255, 209, 102, 0.5);
+}
+
+.result-message {
+    font-size: 1.1rem; /* Reducido de 1.8rem a 1.1rem */
+    margin-bottom: 20px; /* Reducido de 35px a 20px */
+    color: #e0e0e0;
+    max-width: 90%;
+    line-height: 1.5;
+}
+
+.result-image {
+    width: 100%;
+    height: 150px; /* Reducido de 250px a 150px */
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px; /* Reducido de 15px a 10px */
+    margin: 15px 0; /* Reducido de 25px a 15px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #aaa;
+    font-size: 0.9rem; /* Reducido de 1.1rem a 0.9rem */
+}
+
+.result-image-placeholder {
+    font-size: 2.5rem; /* Reducido de 4rem a 2.5rem */
+    margin-bottom: 10px; /* Reducido de 20px a 10px */
+    color: #ffd166;
+}
+
+.result-image-text {
+    font-size: 0.9rem; /* Reducido de 1.5rem a 0.9rem */
+    margin-top: 8px; /* Reducido de 15px a 8px */
+    font-weight: 500;
+}
+
+.play-again-btn {
+    background: linear-gradient(45deg, #06d6a0, #118ab2);
+    color: white;
+    border: none;
+    padding: 12px 30px; /* Reducido de 18px 45px */
+    font-size: 1.1rem; /* Reducido de 1.5rem */
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Reducida la sombra */
+    margin-top: 15px; /* Reducido de 25px */
+}
+
+.play-again-btn:hover {
+    transform: translateY(-3px); /* Reducido de -5px */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Reducida la sombra */
+}
+
+.play-again-btn:active {
+    transform: translateY(0);
+}
+
+footer {
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+    position: relative;
+    z-index: 3;
+}
+
+/* Partículas solo en la parte inferior */
+.particles {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float 15s infinite linear;
+}
+
+.share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    display: none;
+}
+
+.share-modal-content {
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.share-modal h2 {
+    color: #ffd166;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.share-input {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.share-buttons button {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+.copy-btn {
+    background: linear-gradient(45deg, #06d6a0, #118ab2);
+}
+
+.close-btn {
+    background: linear-gradient(45deg, #ef476f, #ff6b6b);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .click-area-container {
+        height: 350px;
+    }
+    
+    #click-area {
+        font-size: 1.8rem;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .stat-box {
+        width: 90%;
+        max-width: 280px;
+    }
+    
+    .timer-container {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .timer {
+        font-size: 3rem;
+    }
+    
+    .result-title {
+        font-size: 1.5rem;
+    }
+    
+    .result-message {
+        font-size: 0.9rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .result-image {
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .click-area-container {
+        height: 280px;
+    }
+    
+    #click-area {
+        font-size: 1.5rem;
+    }
+    
+    .timer-container {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .timer {
+        font-size: 2.5rem;
+    }
+    
+    .result-title {
+        font-size: 1.3rem;
+    }
+    
+    .result-message {
+        font-size: 0.8rem;
+    }
+    
+    .play-again-btn {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+}
+.result-image {
+    width: 100%;
+    height: 180px;
+    position: relative;
+    margin: 15px 0;
+}
+
+.level-image {
+    display: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.level-image img {
+    max-height: 120px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.default-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #ffd166;
+}
+
+.default-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+/* Estilos para diferentes niveles */
+[data-level="1"] img { filter: brightness(0.8); }
+[data-level="5"] img { filter: hue-rotate(45deg); }
+[data-level="10"] img { filter: drop-shadow(0 0 8px gold); }
+[data-level="15"] img { filter: drop-shadow(0 0 15px gold) brightness(1.2); }
+/* Estilo partículas Minecraft */
+.particle:nth-child(4n+1) {
+    background: #78A7FF; /* Azul cielo Overworld */
+}
+.particle:nth-child(4n+2) {
+    background: #8E7618; /* Marrón tierra Overworld */
+}
+.particle:nth-child(4n+3) {
+    background: #6D3F3F; /* Rojo Nether */
+}
+.particle:nth-child(4n+4) {
+    background: #4B3B6D; /* Morado End */
+}
+.stat-box {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 25px;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+    border: 2px solid #8B4513; /* Borde estilo madera Minecraft */
+}
+button {
+    background: linear-gradient(45deg, #118ab2, #073b4c);
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    border: 2px solid #8B4513; /* Borde estilo madera Minecraft */
+}
+#click-area {
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(45deg, 
+        #d9534f 0%, #d9534f 30%,   /* Rojo - Nether */
+        #5cb85c 30%, #5cb85c 60%,  /* Verde - Overworld */
+        #5bc0de 60%, #5bc0de 100%  /* Azul - End */
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    position: relative;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+/* Área de clics */
+.click-area-container {
+    position: relative;
+    margin: 20px auto 20px;
+    width: 95%;
+    height: 450px;
+    min-height: 400px;
+    max-height: 600px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    border: 4px solid #8B4513; /* Borde estilo madera Minecraft */
+}

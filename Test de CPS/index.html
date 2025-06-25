@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de CPS - Clicks Por Segundo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Partículas solo en la parte inferior -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Modal para compartir -->
+    <div class="share-modal" id="share-modal">
+        <div class="share-modal-content">
+            <h2><i class="fas fa-share-alt"></i> Compartir Puntuación</h2>
+            <p>Comparte tu increíble puntuación con tus amigos:</p>
+            <input type="text" class="share-input" id="share-link" readonly>
+            <div class="share-buttons">
+                <button class="copy-btn" id="copy-btn">
+                    <i class="fas fa-copy"></i> Copiar Enlace
+                </button>
+                <button class="close-btn" id="close-share-btn">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Test de CPS</h1>
+            <p class="subtitle">Mide tu velocidad de clics por segundo. ¡Haz clic lo más rápido que puedas en el área roja!</p>
+        </header>
+        
+        <!-- Panel de clics más grande -->
+        <div class="click-area-container">
+            <div id="click-area">¡Haz clic aquí para empezar!</div>
+            <div class="result-container" id="result-container">
+                <h2 class="result-title" id="result-title">¡Resultados!</h2>
+                <p class="result-message" id="result-message">Tu velocidad de clics es de <span id="final-cps">0.0</span> CPS</p>
+                
+            
+            <div class="result-image" id="result-image">
+                        <!-- Imágenes por nivel (inicialmente ocultas) -->
+                        <div class="level-image" data-level="1"><img src="img/1.gif" alt="Nivel 1"></div>
+                        <div class="level-image" data-level="2"><img src="img/2.gif" alt="Nivel 2"></div>
+                        <div class="level-image" data-level="3"><img src="img/3.gif" alt="Nivel 3"></div>
+                        <div class="level-image" data-level="4"><img src="img/4.gif" alt="Nivel 4"></div>
+                        <div class="level-image" data-level="5"><img src="img/5.gif" alt="Nivel 5"></div>
+                        <div class="level-image" data-level="6"><img src="img/6.gif" alt="Nivel 6"></div>
+                        <div class="level-image" data-level="7"><img src="img/7.gif" alt="Nivel 7"></div>
+                        <div class="level-image" data-level="8"><img src="img/8.gif" alt="Nivel 8"></div>
+                        <div class="level-image" data-level="9"><img src="img/9.gif" alt="Nivel 9"></div>
+                        <div class="level-image" data-level="10"><img src="img/10.gif" alt="Nivel 10"></div>
+                        <div class="level-image" data-level="11"><img src="img/11.gif" alt="Nivel 11"></div>
+                        <div class="level-image" data-level="12"><img src="img/12.gif" alt="Nivel 12"></div>
+                        <div class="level-image" data-level="13"><img src="img/13.gif" alt="Nivel 13"></div>
+                        <div class="level-image" data-level="14"><img src="img/14.gif" alt="Nivel 14"></div>
+                        <div class="level-image" data-level="15"><img src="img/15.gif" alt="Nivel 15"></div>
+    
+                        <!-- Placeholder por defecto -->
+                        <div class="default-placeholder">
+                        <i class="fas fa-trophy"></i>
+                        <div id="result-image-text">Tu resultado aparecerá aquí</div>
+                </div>
+            </div>
+                
+                <button class="play-again-btn" id="play-again-btn">
+                    <i class="fas fa-play-circle"></i> Volver a Jugar
+                </button>
+            </div>
+        </div>
+        
+        <!-- Botón de compartir entre el panel y el timer -->
+        <div class="controls">
+            <button id="share-btn"><i class="fas fa-share-alt"></i> Compartir Puntuación</button>
+        </div>
+        
+        <div class="timer-container">
+            <div class="timer-progress" id="timer-progress"></div>
+            <div class="timer-circle">
+                <div class="timer" id="timer">5.0</div>
+            </div>
+        </div>
+        
+        <div class="time-selector-container">
+            <label for="time-selector">Tiempo de prueba:</label>
+            <select id="time-selector">
+                <option value="5">5 segundos</option>
+                <option value="10">10 segundos</option>
+                <option value="15">15 segundos</option>
+            </select>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-title">Clicks totales</div>
+                <div class="stat-value" id="click-count">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">CPS</div>
+                <div class="stat-value" id="cps-result">0.0</div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Test de CPS &copy; 2023 - ¡Demuestra tus habilidades!</p>
+    </footer>
+
+    <script>
+        // Elementos del DOM
+        const clickArea = document.getElementById('click-area');
+        const clickCount = document.getElementById('click-count');
+        const cpsResult = document.getElementById('cps-result');
+        const timer = document.getElementById('timer');
+        const timerProgress = document.getElementById('timer-progress');
+        const timeSelector = document.getElementById('time-selector');
+        const resultContainer = document.getElementById('result-container');
+        const finalCps = document.getElementById('final-cps');
+        const resultImage = document.getElementById('result-image');
+        const resultImageText = document.getElementById('result-image-text');
+        const resultMessage = document.getElementById('result-message');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const resultTitle = document.getElementById('result-title');
+        const shareBtn = document.getElementById('share-btn');
+        const shareModal = document.getElementById('share-modal');
+        const shareLink = document.getElementById('share-link');
+        const copyBtn = document.getElementById('copy-btn');
+        const closeShareBtn = document.getElementById('close-share-btn');
+        
+        // Variables del juego
+        let clicks = 0;
+        let gameTimer;
+        let isTesting = false;
+        let testTime = parseInt(timeSelector.value); // Tiempo inicial
+        let timeRemaining = testTime;
+        let lastCps = 0;
+        
+        // Crear partículas decorativas solo en la parte inferior
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamaño aleatorio
+                const size = Math.random() * 10 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posición inicial aleatoria (solo en la parte inferior)
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = `${Math.random() * 20}%`;
+                
+                // Retraso de animación
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                
+                // Velocidad de animación
+                particle.style.animationDuration = `${15 + Math.random() * 15}s`;
+                
+                // Opacidad aleatoria
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Actualizar el progreso del temporizador (0° a 360°)
+        function updateTimerProgress(percent) {
+            // Convertimos el porcentaje restante a grados (0% = 0°, 100% = 360°)
+            const degrees = (percent / 100) * 360;
+            // Ajustamos para que comience en la parte superior
+            const rotation = degrees - 90;
+            timerProgress.style.setProperty('--progress', `${rotation}deg`);
+        }
+        
+        // Iniciar la prueba
+        function startTest() {
+            if (isTesting) return;
+            
+            testTime = parseInt(timeSelector.value);
+            clicks = 0;
+            timeRemaining = testTime;
+            isTesting = true;
+            clickCount.textContent = clicks;
+            cpsResult.textContent = "0.0";
+            timer.textContent = timeRemaining.toFixed(1);
+            clickArea.textContent = "¡Haz clic ahora!";
+            clickArea.style.background = "linear-gradient(45deg, #06d6a0, #118ab2)";
+            updateTimerProgress(100);
+            resultContainer.style.display = "none";
+            
+            // Temporizador del juego
+            const startTime = Date.now();
+            const endTime = startTime + testTime * 1000;
+            
+            gameTimer = setInterval(() => {
+                const currentTime = Date.now();
+                timeRemaining = (endTime - currentTime) / 1000;
+                
+                if (timeRemaining <= 0) {
+                    endTest();
+                    return;
+                }
+                
+                timer.textContent = timeRemaining.toFixed(1);
+                const progressPercent = (timeRemaining / testTime) * 100;
+                updateTimerProgress(progressPercent);
+                
+                // Cambiar color según el tiempo restante
+                if (timeRemaining < 1) {
+                    timer.style.color = "#ef476f";
+                    timerProgress.style.background = "conic-gradient(#ef476f, #ef476f var(--progress), transparent var(--progress))";
+                } else if (timeRemaining < 2) {
+                    timer.style.color = "#ffd166";
+                    timerProgress.style.background = "conic-gradient(#ffd166, #ffd166 var(--progress), transparent var(--progress))";
+                }
+            }, 50);
+        }
+        
+        // Finalizar la prueba
+        function endTest() {
+            clearInterval(gameTimer);
+            isTesting = false;
+            timeRemaining = 0;
+            timer.textContent = "0.0";
+            updateTimerProgress(0);
+            timer.style.color = "#ef476f";
+            
+            const cps = (clicks / testTime).toFixed(1);
+            lastCps = cps;
+            cpsResult.textContent = cps;
+            clickArea.textContent = "¡Prueba completada!";
+            clickArea.style.background = "linear-gradient(45deg, #ef476f, #ff6b6b)";
+            
+            // Calcular el nivel según CPS
+            const level = Math.min(Math.floor(cps), 15);
+            
+            // Mostrar mensaje según el resultado
+            let message = "";
+            if (cps >= 15) message = "¡Leyenda del CPS!";
+            else if (cps >= 10) message = "¡Velocidad sobrehumana!";
+            else if (cps >= 7) message = "¡Experto en clics!";
+            else if (cps >= 5) message = "¡Muy buena velocidad!";
+            else if (cps >= 3) message = "¡Buen trabajo!";
+            else if (cps >= 1) message = "¡Sigue practicando!";
+            else message = "¡Inténtalo de nuevo!";
+            
+            // Actualizar el contenedor de resultados
+            finalCps.textContent = cps;
+            resultMessage.innerHTML = `${message} Tu velocidad de clics es de <strong>${cps} CPS</strong>`;
+            resultTitle.textContent = message;
+            
+            // Mostrar el contenedor de resultados
+            resultContainer.style.display = "flex";
+            
+            // Actualizar el texto para la imagen
+            resultImageText.textContent = ` (Nivel ${level})`;
+        }
+        
+        // Reiniciar la prueba
+        function resetTest() {
+            if (isTesting) clearInterval(gameTimer);
+            
+            testTime = parseInt(timeSelector.value);
+            clicks = 0;
+            isTesting = false;
+            timeRemaining = testTime;
+            
+            clickCount.textContent = clicks;
+            cpsResult.textContent = "0.0";
+            timer.textContent = testTime.toFixed(1);
+            timer.style.color = "#ffd166";
+            
+            clickArea.textContent = "¡Haz clic aquí para empezar!";
+            clickArea.style.background = "linear-gradient(45deg, #ff6b6b, #ff8e8e)";
+            
+            updateTimerProgress(100);
+            timerProgress.style.background = "conic-gradient(#06d6a0, #06d6a0 var(--progress), transparent var(--progress))";
+            
+            resultContainer.style.display = "none";
+        }
+        
+        // Generar enlace para compartir
+        function generateShareLink() {
+            const baseUrl = window.location.href.split('?')[0];
+            const shareUrl = `${baseUrl}?cps=${lastCps}&time=${testTime}`;
+            return shareUrl;
+        }
+        
+        // Mostrar modal para compartir
+        function showShareModal() {
+            const shareUrl = generateShareLink();
+            shareLink.value = shareUrl;
+            shareModal.style.display = "flex";
+        }
+        
+        // Copiar enlace al portapapeles
+        function copyToClipboard() {
+            shareLink.select();
+            shareLink.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            
+            // Mostrar feedback
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> ¡Copiado!';
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+            }, 2000);
+        }
+        
+        // Event Listeners
+        clickArea.addEventListener('click', () => {
+            if (!isTesting) {
+                startTest();
+                return;
+            }
+            
+            clicks++;
+            clickCount.textContent = clicks;
+        });
+        
+        playAgainBtn.addEventListener('click', resetTest);
+        shareBtn.addEventListener('click', showShareModal);
+        closeShareBtn.addEventListener('click', () => {
+            shareModal.style.display = "none";
+        });
+        copyBtn.addEventListener('click', copyToClipboard);
+        
+        timeSelector.addEventListener('change', resetTest);
+        
+        // Cerrar modal al hacer clic fuera del contenido
+        window.addEventListener('click', (e) => {
+            if (e.target === shareModal) {
+                shareModal.style.display = "none";
+            }
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            updateTimerProgress(100);
+            // Configurar el conic-gradient inicial
+            timerProgress.style.background = "conic-gradient(#06d6a0, #06d6a0 var(--progress), transparent var(--progress))";
+            
+            // Verificar si hay parámetros de URL para mostrar resultado compartido
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedCps = urlParams.get('cps');
+            const sharedTime = urlParams.get('time');
+            
+            if (sharedCps && sharedTime) {
+                // Seleccionar el tiempo compartido
+                timeSelector.value = sharedTime;
+                
+                // Actualizar los resultados
+                cpsResult.textContent = sharedCps;
+                clickCount.textContent = Math.round(sharedCps * sharedTime);
+                
+                // Mostrar mensaje compartido
+                resultContainer.style.display = "flex";
+                resultTitle.textContent = "Resultado Compartido";
+                resultMessage.innerHTML = `Puntuación compartida: <strong>${sharedCps} CPS</strong>`;
+                resultImageText.textContent = `Puntuación compartida de ${sharedCps} CPS`;
+                
+                // Deshabilitar el juego hasta reiniciar
+                isTesting = false;
+            }
+        });
+    </script>
+</body>
+</html>
